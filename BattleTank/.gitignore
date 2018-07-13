@@ -1,6 +1,8 @@
 # Visual Studio 2015 user specific files
 .vs/
 
+BuildingEscape/Content/StarterContent/
+
 # Visual Studio 2015 database file
 *.VC.db
 
