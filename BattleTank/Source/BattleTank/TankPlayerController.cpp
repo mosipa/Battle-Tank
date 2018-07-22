@@ -46,9 +46,22 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 
 	//Crosshair location on player's viewport
 	FVector2D ScreenLocation = FVector2D(OutViewportSizeX * CrossHairXLocation, OutViewportSizeY * CrossHairYLocation);
+	
+	//Deprojection
+	FVector LookDirection;
+	GetLookDirection(ScreenLocation, LookDirection);
 
-	OutHitLocation.X = ScreenLocation.X;
-	OutHitLocation.Y = ScreenLocation.Y;
+	OutHitLocation = FVector(1.0);
 
 	return true;
+}
+
+bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const
+{
+	FVector CameraWorldLocation;
+	return DeprojectScreenPositionToWorld(
+		ScreenLocation.X,
+		ScreenLocation.Y,
+		CameraWorldLocation,
+		LookDirection);
 }
