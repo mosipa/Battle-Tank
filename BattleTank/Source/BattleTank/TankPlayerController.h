@@ -24,4 +24,6 @@ private:
 
 	// Moving barrel towards crosshair
 	void AimTowardsCrosshair();
+
+	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
 };
