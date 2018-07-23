@@ -16,11 +16,10 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
-public:
+private:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
-private:
 	ATank * GetControlledTank() const;
 
 	// Moving barrel towards crosshair
