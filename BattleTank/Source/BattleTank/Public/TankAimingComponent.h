@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Kismet/GameplayStatics.h"
 #include "CoreMinimal.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/ActorComponent.h"
