@@ -57,7 +57,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		ESuggestProjVelocityTraceOption::DoNotTrace))
 	{
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
-		auto TankName = GetOwner()->GetName();
-		UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *TankName, *AimDirection.ToString());
+		auto GetTankName = GetOwner()->GetName();
+		UE_LOG(LogTemp, Warning, TEXT("Tank: %s Aiming at %s"), *GetTankName, *AimDirection.ToString());
 	}
 }
