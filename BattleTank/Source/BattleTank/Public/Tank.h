@@ -47,6 +47,11 @@ private:
 	UPROPERTY(EditAnywhere, Category = Setup)
 		TSubclassOf<AProjectile> ProjectileBlueprint;
 
+	UPROPERTY(EditAnywhere, Category = Firing)
+		float FiringCooldown = 5.0;
+
 	//Reference to barrel for spawning projectile
 	UTankBarrel* Barrel = nullptr;
+
+	float LastTimeFiredProjectile = 0.0;
 };

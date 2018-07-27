@@ -49,15 +49,28 @@ void ATank::Fire()
 {
 	if (!Barrel) { return; }
 
-	//Spawning projectile at socket location
+	//Setup parameters for spawn method
 	auto OutProjectileSpawnLocation = Barrel->GetSocketLocation(FName("Projectile"));
 	auto OutProjectileSpawnRotation = Barrel->GetSocketRotation(FName("Projectile"));
 
-	auto Projectile = GetWorld()->SpawnActor<AProjectile>(
-		ProjectileBlueprint, 
-		OutProjectileSpawnLocation, 
-		OutProjectileSpawnRotation
-	);
+	float CurrentTime = GetWorld()->GetTimeSeconds();
 
-	Projectile->LaunchProjectile(LaunchSpeed);
+	//if Firing is off-cooldown
+	if (CurrentTime - LastTimeFiredProjectile > FiringCooldown)
+	{
+		//Set cooldown on firing
+		LastTimeFiredProjectile = CurrentTime;
+
+		//Spawning projectile at socket location
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+			ProjectileBlueprint,
+			OutProjectileSpawnLocation,
+			OutProjectileSpawnRotation
+			);
+		
+		//Launch projectile
+		Projectile->LaunchProjectile(LaunchSpeed);
+	}
+	//without that else, game crashes
+	else { return; }
 }
