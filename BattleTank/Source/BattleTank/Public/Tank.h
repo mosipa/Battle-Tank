@@ -10,6 +10,7 @@ class UTankBarrel;
 class UTankAimingComponent;
 class UTankTurret;
 class AProjectile;
+class UTankMovementComponent;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -32,7 +33,10 @@ public:
 		void Fire();
 
 protected:
-	UTankAimingComponent * TankAimingComponent = nullptr;
+	UTankAimingComponent* TankAimingComponent = nullptr;
+
+	UPROPERTY(BlueprintReadOnly)
+		UTankMovementComponent* TankMovementComponent = nullptr;
 
 private:	
 	// Called when the game starts or when spawned
