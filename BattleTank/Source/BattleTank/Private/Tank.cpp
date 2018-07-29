@@ -14,8 +14,6 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 	
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
-
-	TankMovementComponent = CreateDefaultSubobject<UTankMovementComponent>(FName("Movement Component"));
 }
 
 // Called when the game starts or when spawned
@@ -72,8 +70,7 @@ void ATank::Fire()
 			);
 		
 		//Launch projectile
+		if (!Projectile) { return; }
 		Projectile->LaunchProjectile(LaunchSpeed);
 	}
-	//without that else, game crashes
-	else { return; }
 }
