@@ -23,5 +23,5 @@ private:
 
 	//Distance between actor and AI
 	UPROPERTY(EditAnywhere, Category = Setup)
-		float AcceptanceRadius = 3000;
+		float AcceptanceRadius = 2000;
 };
