@@ -20,4 +20,8 @@ class BATTLETANK_API ATankAIController : public AAIController
 private:
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
+
+	//Distance between actor and AI
+	UPROPERTY(EditAnywhere, Category = Setup)
+		float AcceptanceRadius = 3000;
 };
