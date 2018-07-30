@@ -28,8 +28,12 @@ void UTankMovementComponent::RequestDirectMove(const FVector& MoveVelocity, bool
 	auto TankForward = GetOwner()->GetActorForwardVector().GetSafeNormal();
 	auto AIForwardIntention = MoveVelocity.GetSafeNormal();
 
-	//Getting throw for moving method
-	auto ThrowAI = FVector::DotProduct(TankForward, AIForwardIntention);
+	//Getting throw for moving forward method
+	auto ForwardThrowAI = FVector::DotProduct(TankForward, AIForwardIntention);
 	
-	IntendMoveForward(ThrowAI);
+	//Getting throw for turning method
+	auto TurnThrowAI = FVector::CrossProduct(AIForwardIntention, TankForward).Z;
+
+	IntendToTurn(TurnThrowAI);
+	IntendMoveForward(ForwardThrowAI);
 }
