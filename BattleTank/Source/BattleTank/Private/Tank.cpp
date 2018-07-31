@@ -16,11 +16,13 @@ ATank::ATank()
 
 void ATank::AimAt(FVector HitLocation)
 {
+	if (!TankAimingComponent) { return; }
 	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
 
 void ATank::Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet)
 {
+	if (!TankAimingComponent) { return; }
 	TankAimingComponent->Initialise(BarrelToSet, TurretToSet);
 	Barrel = BarrelToSet;
 }
