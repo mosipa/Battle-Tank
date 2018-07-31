@@ -21,8 +21,6 @@ private:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
-	ATank * GetControlledTank() const;
-
 	// Moving barrel towards crosshair
 	void AimTowardsCrosshair();
 
@@ -41,4 +39,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		float LineTraceRange = 1000000;
+
+protected:
+	UFUNCTION(BlueprintCallable, Category = Setup)
+		ATank * GetControlledTank() const;
 };
