@@ -16,20 +16,20 @@ ATank::ATank()
 
 void ATank::AimAt(FVector HitLocation)
 {
-	if (!TankAimingComponent) { return; }
+	if (!ensure(TankAimingComponent)) { return; }
 	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
 
 void ATank::Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet)
 {
-	if (!TankAimingComponent) { return; }
+	if (!ensure(TankAimingComponent)) { return; }
 	TankAimingComponent->Initialise(BarrelToSet, TurretToSet);
 	Barrel = BarrelToSet;
 }
 
 void ATank::Fire()
 {
-	if (!Barrel) { return; }
+	if (!ensure(Barrel)) { return; }
 
 	//Setup parameters for spawn method
 	auto OutProjectileSpawnLocation = Barrel->GetSocketLocation(FName("Projectile"));
@@ -51,7 +51,7 @@ void ATank::Fire()
 			);
 		
 		//Launch projectile
-		if (!Projectile) { return; }
+		if (!ensure(Projectile)) { return; }
 		Projectile->LaunchProjectile(LaunchSpeed);
 	}
 }

@@ -13,6 +13,8 @@ void UTankTrack::SetThrottle(float Throttle)
 	//Get tank body
 	auto TankRoot = Cast<UPrimitiveComponent>(GetOwner()->GetRootComponent());
 	
+	if (!ensure(TankRoot)) { return; }
+
 	TankRoot->AddForceAtLocation(
 		ForceApplied,
 		ForceLocation
