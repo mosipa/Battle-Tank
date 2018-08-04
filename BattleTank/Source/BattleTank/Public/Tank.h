@@ -28,6 +28,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void Fire();
 
+	virtual void BeginPlay() override;
+
 protected:
 	UPROPERTY(BlueprintReadOnly)
 		UTankAimingComponent* TankAimingComponent = nullptr;
