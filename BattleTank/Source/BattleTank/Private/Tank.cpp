@@ -4,7 +4,6 @@
 #include "TankBarrel.h"
 #include "TankTurret.h"
 #include "Projectile.h"
-#include "TankAimingComponent.h"
 
 // Sets default values
 ATank::ATank()
@@ -13,22 +12,8 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-void ATank::BeginPlay()
-{
-	Super::BeginPlay();
-	TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
-}
-
-void ATank::AimAt(FVector HitLocation)
-{
-	if (!ensure(TankAimingComponent)) { return; }
-	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
-}
-
 void ATank::Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet)
 {
-	if (!ensure(TankAimingComponent)) { return; }
-	TankAimingComponent->Initialise(BarrelToSet, TurretToSet);
 	Barrel = BarrelToSet;
 }
 

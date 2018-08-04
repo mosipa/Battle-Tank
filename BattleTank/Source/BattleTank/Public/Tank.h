@@ -20,15 +20,10 @@ public:
 	// Sets default values for this pawn's properties
 	ATank();
 
-	void AimAt(FVector HitLocation);
-
-	UFUNCTION(BlueprintCallable, Category = Setup)
-		void Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
+	void Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
 
 	UFUNCTION(BlueprintCallable)
 		void Fire();
-
-	virtual void BeginPlay() override;
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
@@ -36,7 +31,7 @@ protected:
 
 private:
 	UPROPERTY(EditAnywhere, Category = Firing)
-		float LaunchSpeed = 8000;
+		float LaunchSpeed = 8000; //REMOVE after moving all code that needs it
 
 	UPROPERTY(EditAnywhere, Category = Setup)
 		TSubclassOf<AProjectile> ProjectileBlueprint;

@@ -10,7 +10,6 @@
 /**
  * 
  */
-class ATank;
 class UTankAimingComponent;
 
 UCLASS()
@@ -31,6 +30,8 @@ private:
 
 	bool GetLookVectorHitLocation(FVector LookDirection, FVector& OutHitLocation) const;
 
+	UTankAimingComponent* AimingComponent = nullptr;
+
 	//Crosshair
 	UPROPERTY(EditAnywhere)
 		float CrossHairXLocation = 0.5;
@@ -42,9 +43,6 @@ private:
 		float LineTraceRange = 1000000;
 
 protected:
-	UFUNCTION(BlueprintCallable, Category = Setup)
-		ATank * GetControlledTank() const;
-
 	UFUNCTION(BlueprintImplementableEvent, Category = Setup)
 		void FoundAimingComponent(UTankAimingComponent* AimCompRef);
 };
