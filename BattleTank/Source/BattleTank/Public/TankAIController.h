@@ -10,7 +10,6 @@
 /**
  * 
  */
-class ATank;
 class UTankAimingComponent;
 
 UCLASS()
@@ -21,8 +20,6 @@ class BATTLETANK_API ATankAIController : public AAIController
 private:
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
-
-	UTankAimingComponent* AimingComponent = nullptr;
 
 	//Distance between actor and AI
 	UPROPERTY(EditAnywhere, Category = Setup)

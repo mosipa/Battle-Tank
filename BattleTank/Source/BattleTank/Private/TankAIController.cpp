@@ -6,8 +6,6 @@
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 }
 
 void ATankAIController::Tick(float DeltaTime)

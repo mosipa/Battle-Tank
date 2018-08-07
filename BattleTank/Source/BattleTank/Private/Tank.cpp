@@ -19,6 +19,8 @@ void ATank::Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet)
 
 void ATank::Fire()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Firing"));
+	/*
 	if (!ensure(Barrel)) { return; }
 
 	//Setup parameters for spawn method
@@ -44,4 +46,5 @@ void ATank::Fire()
 		if (!ensure(Projectile)) { return; }
 		Projectile->LaunchProjectile(LaunchSpeed);
 	}
+	*/
 }
