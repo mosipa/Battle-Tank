@@ -3,6 +3,7 @@
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
 #include "TankTurret.h"
+#include "Projectile.h"
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -61,4 +62,37 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 	//Rotate barrel + turret to given location
 	Barrel->Elevate(DeltaBarrelRotator.Pitch);
 	Turret->TurnTurret(DeltaTurretRotator.Yaw);
+}
+
+void UTankAimingComponent::Fire()
+{	
+	if (!ensure(Barrel)) { return; }
+
+	//Setup parameters for spawn method
+	auto OutProjectileSpawnLocation = Barrel->GetSocketLocation(FName("Projectile"));
+	auto OutProjectileSpawnRotation = Barrel->GetSocketRotation(FName("Projectile"));
+
+	float CurrentTime = GetWorld()->GetTimeSeconds();
+
+	//if Firing is off-cooldown
+	if (CurrentTime - LastTimeFiredProjectile > FiringCooldown)
+	{
+		//Printing info about tank that is shooting
+		auto TName = GetOwner()->GetName();
+		UE_LOG(LogTemp, Warning, TEXT("Firing %s"), *(TName));
+
+		//Set cooldown on firing
+		LastTimeFiredProjectile = CurrentTime;
+
+		//Spawning projectile at socket location
+		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+		ProjectileBlueprint,
+		OutProjectileSpawnLocation,
+		OutProjectileSpawnRotation
+		);
+
+		//Launch projectile
+		if (!ensure(Projectile)) { return; }
+		Projectile->LaunchProjectile(LaunchSpeed);
+	}
 }
