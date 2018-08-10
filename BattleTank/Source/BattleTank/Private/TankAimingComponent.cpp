@@ -10,9 +10,23 @@ UTankAimingComponent::UTankAimingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
+}
+
+void UTankAimingComponent::BeginPlay()
+{
+	LastTimeFiredProjectile = GetWorld()->GetTimeSeconds();
+}
+
+void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
+{
+	float CurrentTime = GetWorld()->GetTimeSeconds();
+	if (CurrentTime - LastTimeFiredProjectile > FiringCooldown)
+	{
+		FiringState = EFiringState::Aiming;
+	}
 }
 
 void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet)
@@ -67,22 +81,22 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 void UTankAimingComponent::Fire()
 {	
 	if (!ensure(Barrel)) { return; }
+	if (!ensure(ProjectileBlueprint)) { return; }
 
 	//Setup parameters for spawn method
 	auto OutProjectileSpawnLocation = Barrel->GetSocketLocation(FName("Projectile"));
 	auto OutProjectileSpawnRotation = Barrel->GetSocketRotation(FName("Projectile"));
 
-	float CurrentTime = GetWorld()->GetTimeSeconds();
-
+	
 	//if Firing is off-cooldown
-	if (CurrentTime - LastTimeFiredProjectile > FiringCooldown)
+	if (FiringState != EFiringState::Reloading)
 	{
 		//Printing info about tank that is shooting
 		auto TName = GetOwner()->GetName();
 		UE_LOG(LogTemp, Warning, TEXT("Firing %s"), *(TName));
 
 		//Set cooldown on firing
-		LastTimeFiredProjectile = CurrentTime;
+		LastTimeFiredProjectile = GetWorld()->GetTimeSeconds();
 
 		//Spawning projectile at socket location
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
