@@ -18,18 +18,48 @@ UTankAimingComponent::UTankAimingComponent()
 void UTankAimingComponent::BeginPlay()
 {
 	LastTimeFiredProjectile = GetWorld()->GetTimeSeconds();
+
+	if (!ensure(Barrel)) { return; }
+
+	LastBarrelLocation = Barrel->GetForwardVector();
 }
 
 void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 {
 	float CurrentTime = GetWorld()->GetTimeSeconds();
-	if (CurrentTime - LastTimeFiredProjectile > FiringCooldown)
+	if (CurrentTime - LastTimeFiredProjectile < FiringCooldown)
+	{
+		FiringState = EFiringState::Reloading;
+	}
+	else if(IsBarrelMoving())
 	{
 		FiringState = EFiringState::Aiming;
 	}
 	else
 	{
-		FiringState = EFiringState::Reloading;
+		FiringState = EFiringState::Locked;
+	}
+}
+
+bool UTankAimingComponent::IsBarrelMoving()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Inside IsBarrelMoving"));
+	if (!ensure(Barrel)) { return false; }
+
+	FVector BarrelLocation = Barrel->GetForwardVector();
+
+	//Barrel hasn't moved
+	if (BarrelLocation.Equals(LastBarrelLocation, 0.01)) 
+	{ 
+		UE_LOG(LogTemp, Warning, TEXT("Barrel hasnt moved")); 
+		return false;
+	}
+	//Barrel moved
+	else 
+	{ 
+		UE_LOG(LogTemp, Warning, TEXT("Barrel moved"));
+		LastBarrelLocation = BarrelLocation; 
+		return true; 
 	}
 }
 
@@ -42,6 +72,7 @@ void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret* Tur
 void UTankAimingComponent::AimAt(FVector HitLocation)
 {
 	if (!ensure(Barrel && Turret)) { return; }
+
 	FVector OutLaunchVelocity;
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 
@@ -69,6 +100,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 {
 	if (!ensure(Barrel && Turret)) { return; }
+
 	//Difference between current barrel and turret rotation and desired aim direction
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto TurretRotator = Turret->GetForwardVector().Rotation();
@@ -95,10 +127,6 @@ void UTankAimingComponent::Fire()
 	//if Firing is off-cooldown
 	if (FiringState != EFiringState::Reloading)
 	{
-		//Printing info about tank that is shooting
-		auto TName = GetOwner()->GetName();
-		UE_LOG(LogTemp, Warning, TEXT("Firing %s"), *(TName));
-
 		//Set cooldown on firing
 		LastTimeFiredProjectile = GetWorld()->GetTimeSeconds();
 
@@ -111,6 +139,7 @@ void UTankAimingComponent::Fire()
 
 		//Launch projectile
 		if (!ensure(Projectile)) { return; }
+
 		Projectile->LaunchProjectile(LaunchSpeed);
 	}
 }

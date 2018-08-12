@@ -54,6 +54,8 @@ private:
 
 	float LastTimeFiredProjectile = 0.0;
 
+	FVector LastBarrelLocation;
+
 	UPROPERTY(EditAnywhere, Category = Firing)
 		float LaunchSpeed = 8000;
 
@@ -65,4 +67,6 @@ private:
 	virtual void BeginPlay() override;
 
 	void MoveBarrelTowards(FVector AimDirection);
+
+	bool IsBarrelMoving();
 };
