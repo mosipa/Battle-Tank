@@ -18,14 +18,12 @@ UTankAimingComponent::UTankAimingComponent()
 void UTankAimingComponent::BeginPlay()
 {
 	LastTimeFiredProjectile = GetWorld()->GetTimeSeconds();
-
-	if (!ensure(Barrel)) { return; }
-
-	LastBarrelLocation = Barrel->GetForwardVector();
 }
 
 void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 {
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
 	float CurrentTime = GetWorld()->GetTimeSeconds();
 	if (CurrentTime - LastTimeFiredProjectile < FiringCooldown)
 	{

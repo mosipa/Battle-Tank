@@ -14,7 +14,10 @@ UCLASS(meta = (BlueprintSpawnableComponent))
 class BATTLETANK_API UTankTurret : public UStaticMeshComponent
 {
 	GENERATED_BODY()
-	
+
+public:
+	void TurnTurret(float RelativeSpeed);
+
 private:
 	UPROPERTY(EditAnywhere, Category = Setup)
 		float MaxDegreesPerSecond = 20.0;
@@ -24,7 +27,4 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = Setup)
 		float RelativeMinSpeed = -1.0;
-	
-public:
-	void TurnTurret(float RelativeSpeed);
 };

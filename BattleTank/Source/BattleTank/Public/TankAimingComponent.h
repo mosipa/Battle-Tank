@@ -35,7 +35,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void Fire();
 
-public:	
 	void AimAt(FVector HitLocation);
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
@@ -54,7 +53,7 @@ private:
 
 	float LastTimeFiredProjectile = 0.0;
 
-	FVector LastBarrelLocation;
+	FVector LastBarrelLocation = FVector(0);
 
 	UPROPERTY(EditAnywhere, Category = Firing)
 		float LaunchSpeed = 8000;
