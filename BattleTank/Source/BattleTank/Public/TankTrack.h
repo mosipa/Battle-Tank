@@ -25,5 +25,14 @@ public:
 		float TrackMaxDrivingForce = 2000000; //Tank mass (40 t) and acceleration (10 m/s^2)
 
 private:
+	UFUNCTION(BlueprintCallable)
+		void OnHit(
+			UPrimitiveComponent* HitComponent,
+			AActor* OtherActor,
+			UPrimitiveComponent* OtherComponent,
+			FVector NormalImpulse,
+			const FHitResult& Hit);
+
+	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction) override;
 };

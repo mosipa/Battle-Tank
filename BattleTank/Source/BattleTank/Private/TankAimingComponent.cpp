@@ -41,7 +41,6 @@ void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickTy
 
 bool UTankAimingComponent::IsBarrelMoving()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Inside IsBarrelMoving"));
 	if (!ensure(Barrel)) { return false; }
 
 	FVector BarrelLocation = Barrel->GetForwardVector();
@@ -49,13 +48,11 @@ bool UTankAimingComponent::IsBarrelMoving()
 	//Barrel hasn't moved
 	if (BarrelLocation.Equals(LastBarrelLocation, 0.01)) 
 	{ 
-		UE_LOG(LogTemp, Warning, TEXT("Barrel hasnt moved")); 
 		return false;
 	}
 	//Barrel moved
 	else 
 	{ 
-		UE_LOG(LogTemp, Warning, TEXT("Barrel moved"));
 		LastBarrelLocation = BarrelLocation; 
 		return true; 
 	}
