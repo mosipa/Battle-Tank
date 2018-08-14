@@ -4,7 +4,7 @@
 
 UTankTrack::UTankTrack()
 {
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
 void UTankTrack::BeginPlay()
@@ -12,10 +12,9 @@ void UTankTrack::BeginPlay()
 	OnComponentHit.AddDynamic(this, &UTankTrack::OnHit);
 }
 
-void UTankTrack::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
+void UTankTrack::ApplySidewaysForce()
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
+	auto DeltaTime = GetWorld()->GetDeltaSeconds();
 	auto SlippedSpeed = FVector::DotProduct(GetRightVector(), GetComponentVelocity());
 	//Correction to acceleration this frame
 	auto CorrectionAcceleration = -SlippedSpeed / DeltaTime * GetRightVector();
@@ -29,14 +28,21 @@ void UTankTrack::TickComponent(float DeltaTime, enum ELevelTick TickType, FActor
 
 void UTankTrack::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
-	auto TrackName = GetName();
-	UE_LOG(LogTemp, Warning, TEXT("%s touches ground"), *(TrackName));
+	ApplySidewaysForce();
+	DriveTrack();
+	
+	CurrentThrottle = 0;
 }
 
 void UTankTrack::SetThrottle(float Throttle)
 {
+	CurrentThrottle = FMath::Clamp<float>(CurrentThrottle + Throttle, -1, 1);
+}
+
+void UTankTrack::DriveTrack()
+{
 	//Calculate force that will be applied on tracks
-	auto ForceApplied = GetForwardVector() * Throttle * TrackMaxDrivingForce;
+	auto ForceApplied = GetForwardVector() * CurrentThrottle * TrackMaxDrivingForce;
 	
 	//Get location of track
 	auto ForceLocation = GetComponentLocation();

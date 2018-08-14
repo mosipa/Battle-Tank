@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/World.h"
 #include "Components/StaticMeshComponent.h"
 #include "TankTrack.generated.h"
 
@@ -18,7 +19,9 @@ public:
 	UTankTrack();
 
 	UFUNCTION(BlueprintCallable, Category = Input)
-		void SetThrottle(float Throttle);
+		void DriveTrack();
+
+	void SetThrottle(float Throttle);
 
 	//Max force per track in Newton
 	UPROPERTY(EditDefaultsOnly)
@@ -33,6 +36,10 @@ private:
 			FVector NormalImpulse,
 			const FHitResult& Hit);
 
+	//Prevent tank drifting
+	void ApplySidewaysForce();
+
 	virtual void BeginPlay() override;
-	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction) override;
+
+	float CurrentThrottle = 0;
 };
