@@ -16,7 +16,8 @@ enum class EFiringState : uint8
 {
 	Reloading,
 	Aiming,
-	Locked
+	Locked,
+	OutOfAmmo
 };
 
 class UTankBarrel;
@@ -42,6 +43,9 @@ public:
 
 	EFiringState GetFiringState() const;
 
+	UFUNCTION(BlueprintCallable, Category = Firing)
+		int32 GetAmmoLeft() const;
+
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = State)
 		EFiringState FiringState = EFiringState::Reloading;
@@ -59,6 +63,8 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = Firing)
 		float LaunchSpeed = 8000;
+
+	int32 AmmoLeft = 5; //Find default value
 
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;

@@ -25,7 +25,11 @@ void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickTy
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	float CurrentTime = GetWorld()->GetTimeSeconds();
-	if (CurrentTime - LastTimeFiredProjectile < FiringCooldown)
+	if (AmmoLeft == 0)
+	{
+		FiringState = EFiringState::OutOfAmmo;
+	}
+	else if (CurrentTime - LastTimeFiredProjectile < FiringCooldown)
 	{
 		FiringState = EFiringState::Reloading;
 	}
@@ -42,6 +46,11 @@ void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickTy
 EFiringState UTankAimingComponent::GetFiringState() const
 {
 	return FiringState;
+}
+
+int32 UTankAimingComponent::GetAmmoLeft() const
+{
+	return AmmoLeft;
 }
 
 bool UTankAimingComponent::IsBarrelMoving()
@@ -140,7 +149,7 @@ void UTankAimingComponent::Fire()
 
 	
 	//if Firing is off-cooldown
-	if (FiringState != EFiringState::Reloading)
+	if (FiringState == EFiringState::Locked || FiringState == EFiringState::Aiming)
 	{
 		//Set cooldown on firing
 		LastTimeFiredProjectile = GetWorld()->GetTimeSeconds();
@@ -156,5 +165,6 @@ void UTankAimingComponent::Fire()
 		if (!ensure(Projectile)) { return; }
 
 		Projectile->LaunchProjectile(LaunchSpeed);
+		AmmoLeft--;
 	}
 }
