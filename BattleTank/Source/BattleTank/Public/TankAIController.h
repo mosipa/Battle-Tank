@@ -22,6 +22,7 @@ private:
 	virtual void BeginPlay() override;
 
 	//Distance between actor and AI
-	UPROPERTY(EditAnywhere, Category = Setup)
-		float AcceptanceRadius = 2000;
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
+		float AcceptanceRadius = 6000;
 };
