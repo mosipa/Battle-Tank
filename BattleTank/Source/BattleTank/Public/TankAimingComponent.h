@@ -64,7 +64,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = Firing)
 		float LaunchSpeed = 8000;
 
-	int32 AmmoLeft = 5; //Find default value
+	UPROPERTY(EditAnywhere, Category = Firing)
+		int32 AmmoLeft = 5; //Find default value
 
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
