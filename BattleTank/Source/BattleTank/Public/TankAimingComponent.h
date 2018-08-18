@@ -51,20 +51,20 @@ protected:
 		EFiringState FiringState = EFiringState::Reloading;
 
 private:
-	UPROPERTY(EditAnywhere, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		TSubclassOf<AProjectile> ProjectileBlueprint;
 
-	UPROPERTY(EditAnywhere, Category = Firing)
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
 		float FiringCooldown = 5.0;
 
 	float LastTimeFiredProjectile = 0.0;
 
 	FVector LastBarrelLocation = FVector(0);
 
-	UPROPERTY(EditAnywhere, Category = Firing)
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
 		float LaunchSpeed = 8000;
 
-	UPROPERTY(EditAnywhere, Category = Firing)
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
 		int32 AmmoLeft = 5; //Find default value
 
 	UTankBarrel* Barrel = nullptr;

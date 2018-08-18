@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/World.h"
 #include "GameFramework/Actor.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Particles/ParticleSystemComponent.h"
@@ -26,17 +27,22 @@ protected:
 private:
 	UProjectileMovementComponent * ProjectileMovementComponent = nullptr;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Component)
 		UStaticMeshComponent* CollisionMesh = nullptr;
 		
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Component)
 		UParticleSystemComponent* LaunchBlast = nullptr;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Component)
 		UParticleSystemComponent* ImpactBlast = nullptr;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = Component)
 		URadialForceComponent* ExplosionForce = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
+		float DestroyDelay = 5.f;
+
+	FTimerHandle OutTimerHandle;
 
 	UFUNCTION(BlueprintCallable)
 		void OnHit(
@@ -45,4 +51,7 @@ private:
 			UPrimitiveComponent* OtherComponent,
 			FVector NormalImpulse,
 			const FHitResult& Hit);
+
+	UFUNCTION(BlueprintCallable)
+		void OnTimerExpire();
 };

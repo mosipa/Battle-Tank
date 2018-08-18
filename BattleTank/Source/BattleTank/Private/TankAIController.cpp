@@ -26,7 +26,6 @@ void ATankAIController::Tick(float DeltaTime)
 	AimingComponent->AimAt(PlayerTank->GetActorLocation());
 
 	EFiringState FiringState = AimingComponent->GetFiringState();
-	UE_LOG(LogTemp, Warning, TEXT("AI current firing state: %d"), (int8)FiringState);
 
 	if (FiringState == EFiringState::Locked)
 	{
