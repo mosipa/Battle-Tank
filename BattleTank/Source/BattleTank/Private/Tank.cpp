@@ -15,18 +15,23 @@ float ATank::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEv
 
 	UE_LOG(LogTemp, Warning, TEXT("%s received damage = %f"), *(TankName), DamageAmount);
 
-	float DamageToApply = FMath::Clamp<float>(DamageAmount, 0, TankHealth);
+	float DamageToApply = FMath::Clamp<float>(DamageAmount, 0, TanksCurrentHealth);
 
-	TankHealth -= DamageToApply;
+	TanksCurrentHealth -= DamageToApply;
 
 	UE_LOG(LogTemp, Warning, TEXT("Applied damage = %f to tank: %s"), DamageToApply, *(TankName));
 
-	UE_LOG(LogTemp, Warning, TEXT("Tank %s HealthLeft = %f"), *(TankName), TankHealth);
+	UE_LOG(LogTemp, Warning, TEXT("Tank %s HealthLeft = %f"), *(TankName), TanksCurrentHealth);
 
-	if (TankHealth == 0.f)
+	if (TanksCurrentHealth == 0.f)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Tank %s destroyed"), *(TankName));
 	}
 
 	return DamageToApply;
+}
+
+float ATank::GetHealthPercent() const
+{
+	return TanksCurrentHealth / TanksStartingHealth;
 }
