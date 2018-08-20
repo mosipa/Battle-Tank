@@ -30,6 +30,11 @@ private:
 
 	bool GetLookVectorHitLocation(FVector LookDirection, FVector& OutHitLocation) const;
 
+	UFUNCTION()
+		void OnTanksDeath();
+
+	virtual void SetPawn(APawn* InPawn) override;
+
 	UTankAimingComponent* AimingComponent = nullptr;
 
 	//Crosshair

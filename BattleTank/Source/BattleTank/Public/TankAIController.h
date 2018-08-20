@@ -21,6 +21,11 @@ private:
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+		void OnTanksDeath();
+
+	virtual void SetPawn(APawn* InPawn) override;
+
 	//Distance between actor and AI
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
