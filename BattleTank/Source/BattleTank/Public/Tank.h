@@ -14,16 +14,18 @@ class BATTLETANK_API ATank : public APawn
 	GENERATED_BODY()
 
 private:
-	UPROPERTY(EditDefaultsOnly, Category = Setup) //Change to EditDefaultsOnly when done testing
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		float TanksStartingHealth = 100.f;
 
 	UPROPERTY(VisibleAnywhere, Category = Health)
-		float TanksCurrentHealth = TanksStartingHealth;
+		float TanksCurrentHealth; //Initialise in BeginPlay to prevent bug
 
 	ATank();
 
 	UFUNCTION(BlueprintPure, Category = Health)
 		float GetHealthPercent() const;
+
+	virtual void BeginPlay() override;
 
 public:
 	// Sets default values for this pawn's properties

@@ -37,6 +37,7 @@ void ATankPlayerController::SetPawn(APawn* InPawn)
 void ATankPlayerController::OnTanksDeath()
 {
 	UE_LOG(LogTemp, Warning, TEXT("GameOver, you have been destroyed"));
+	StartSpectatingOnly();
 }
 
 void ATankPlayerController::AimTowardsCrosshair()

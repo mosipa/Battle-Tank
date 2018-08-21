@@ -29,7 +29,7 @@ private:
 	UProjectileMovementComponent * ProjectileMovementComponent = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
-		float ProjectileDamamge = 10.f;
+		float ProjectileDamamge = 50.f; //Change after testing to 'normal' value
 
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		float DestroyDelay = 5.f;
