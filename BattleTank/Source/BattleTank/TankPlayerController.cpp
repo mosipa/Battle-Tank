@@ -12,12 +12,25 @@ void ATankPlayerController::BeginPlay()
 
 	if (!ensure(AimingComponent)) { return; }
 	FoundAimingComponent(AimingComponent);
+
+	//Array for Tank actors spawn in level
+	TArray<AActor*> TankArray;
+
+	UGameplayStatics::GetAllActorsOfClass(this, ATank::StaticClass(), TankArray);
+
+	for (auto n : TankArray)
+	{
+		NumberOfActors++;
+	}
 }
 
 void ATankPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	AimTowardsCrosshair();
+
+	UE_LOG(LogTemp, Warning, TEXT("Actors in level: %d"), NumberOfActors);
+	
 }
 
 void ATankPlayerController::SetPawn(APawn* InPawn)

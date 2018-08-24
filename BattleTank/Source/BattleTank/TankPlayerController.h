@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
+#include "Kismet/GameplayStatics.h"
 #include "TankPlayerController.generated.h"
 
 /**
@@ -46,6 +47,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 		float LineTraceRange = 1000000;
+
+	int32 NumberOfActors = 0;
 
 protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = Setup)
