@@ -52,4 +52,5 @@ void ATankAIController::OnTanksDeath()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Enemy tank's been destroyed."));
 	GetPawn()->DetachFromControllerPendingDestroy();
+	OnAIDeath.Broadcast();
 }

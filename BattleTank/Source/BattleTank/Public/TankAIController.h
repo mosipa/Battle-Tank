@@ -12,6 +12,8 @@
  */
 class UTankAimingComponent;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAITankDelegate);
+
 UCLASS()
 class BATTLETANK_API ATankAIController : public AAIController
 {
@@ -30,4 +32,7 @@ private:
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		float AcceptanceRadius = 6000;
+
+public: 
+	FAITankDelegate OnAIDeath;
 };

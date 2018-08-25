@@ -2,6 +2,7 @@
 
 #include "TankPlayerController.h"
 #include "Tank.h"
+#include "TankAIController.h"
 #include "TankAimingComponent.h"
 
 void ATankPlayerController::BeginPlay()
@@ -13,15 +14,7 @@ void ATankPlayerController::BeginPlay()
 	if (!ensure(AimingComponent)) { return; }
 	FoundAimingComponent(AimingComponent);
 
-	//Array for Tank actors spawn in level
-	TArray<AActor*> TankArray;
-
-	UGameplayStatics::GetAllActorsOfClass(this, ATank::StaticClass(), TankArray);
-
-	for (auto n : TankArray)
-	{
-		NumberOfActors++;
-	}
+	CountTankActors();
 }
 
 void ATankPlayerController::Tick(float DeltaTime)
@@ -31,6 +24,20 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 	UE_LOG(LogTemp, Warning, TEXT("Actors in level: %d"), NumberOfActors);
 	
+	GetAIControllers();
+}
+
+void ATankPlayerController::CountTankActors()
+{
+	//Array for Tank actors spawned in level
+	TArray<AActor*> TankArray;
+
+	UGameplayStatics::GetAllActorsOfClass(this, ATank::StaticClass(), TankArray);
+
+	for (auto n : TankArray)
+	{
+		NumberOfActors++;
+	}
 }
 
 void ATankPlayerController::SetPawn(APawn* InPawn)
@@ -47,10 +54,27 @@ void ATankPlayerController::SetPawn(APawn* InPawn)
 	}
 }
 
+void ATankPlayerController::GetAIControllers()
+{
+	//Array for AIControllers spawned in level
+	TArray<AActor*> AIControllerArray;
+	UGameplayStatics::GetAllActorsOfClass(this, ATankAIController::StaticClass(), AIControllerArray);
+
+	for (auto AIController : AIControllerArray)
+	{
+		Cast<ATankAIController>(AIController)->OnAIDeath.AddUniqueDynamic(this, &ATankPlayerController::OnAIDeath);
+	}
+}
+
 void ATankPlayerController::OnTanksDeath()
 {
 	UE_LOG(LogTemp, Warning, TEXT("GameOver, you have been destroyed"));
 	StartSpectatingOnly();
+}
+
+void ATankPlayerController::OnAIDeath()
+{
+	NumberOfActors--;
 }
 
 void ATankPlayerController::AimTowardsCrosshair()

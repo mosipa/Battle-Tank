@@ -34,7 +34,15 @@ private:
 	UFUNCTION()
 		void OnTanksDeath();
 
+	UFUNCTION()
+		void OnAIDeath();
+
 	virtual void SetPawn(APawn* InPawn) override;
+
+	void CountTankActors();
+
+	//Get all AIControllers and check if any of them got destroyed
+	void GetAIControllers();
 
 	UTankAimingComponent* AimingComponent = nullptr;
 
