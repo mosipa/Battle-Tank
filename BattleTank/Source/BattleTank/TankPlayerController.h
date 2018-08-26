@@ -39,10 +39,14 @@ private:
 
 	virtual void SetPawn(APawn* InPawn) override;
 
-	void CountTankActors();
+	void CountAITanks();
 
 	//Get all AIControllers and check if any of them got destroyed
 	void GetAIControllers();
+
+	//Return number of enemies left
+	UFUNCTION(BlueprintCallable)
+		int32 GetEnemiesLeft() const;
 
 	UTankAimingComponent* AimingComponent = nullptr;
 
@@ -56,7 +60,8 @@ private:
 	UPROPERTY(EditAnywhere)
 		float LineTraceRange = 1000000;
 
-	int32 NumberOfActors = 0;
+	UPROPERTY(EditDefaultsOnly)
+		int32 NumberOfAI = 0;
 
 protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = Setup)

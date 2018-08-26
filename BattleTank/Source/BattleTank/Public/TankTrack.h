@@ -25,7 +25,7 @@ public:
 
 	//Max force per track in Newton
 	UPROPERTY(EditDefaultsOnly)
-		float TrackMaxDrivingForce = 2000000; //Tank mass (40 t) and acceleration (10 m/s^2)
+		float TrackMaxDrivingForce = 10000000; //Tank mass (40 t) and acceleration (10 m/s^2)
 
 private:
 	UFUNCTION(BlueprintCallable)

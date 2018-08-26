@@ -14,7 +14,7 @@ void ATankPlayerController::BeginPlay()
 	if (!ensure(AimingComponent)) { return; }
 	FoundAimingComponent(AimingComponent);
 
-	CountTankActors();
+	CountAITanks();
 }
 
 void ATankPlayerController::Tick(float DeltaTime)
@@ -22,21 +22,21 @@ void ATankPlayerController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	AimTowardsCrosshair();
 
-	UE_LOG(LogTemp, Warning, TEXT("Actors in level: %d"), NumberOfActors);
+	UE_LOG(LogTemp, Warning, TEXT("Actors in level: %d"), NumberOfAI);
 	
 	GetAIControllers();
 }
 
-void ATankPlayerController::CountTankActors()
+void ATankPlayerController::CountAITanks()
 {
 	//Array for Tank actors spawned in level
 	TArray<AActor*> TankArray;
 
-	UGameplayStatics::GetAllActorsOfClass(this, ATank::StaticClass(), TankArray);
+	UGameplayStatics::GetAllActorsOfClass(this, ATankAIController::StaticClass(), TankArray);
 
 	for (auto n : TankArray)
 	{
-		NumberOfActors++;
+		NumberOfAI++;
 	}
 }
 
@@ -66,6 +66,11 @@ void ATankPlayerController::GetAIControllers()
 	}
 }
 
+int32 ATankPlayerController::GetEnemiesLeft() const
+{
+	return NumberOfAI;
+}
+
 void ATankPlayerController::OnTanksDeath()
 {
 	UE_LOG(LogTemp, Warning, TEXT("GameOver, you have been destroyed"));
@@ -74,7 +79,7 @@ void ATankPlayerController::OnTanksDeath()
 
 void ATankPlayerController::OnAIDeath()
 {
-	NumberOfActors--;
+	NumberOfAI--;
 }
 
 void ATankPlayerController::AimTowardsCrosshair()
