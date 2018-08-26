@@ -21,8 +21,6 @@ void ATankPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	AimTowardsCrosshair();
-
-	UE_LOG(LogTemp, Warning, TEXT("Actors in level: %d"), NumberOfAI);
 	
 	GetAIControllers();
 }
@@ -75,11 +73,20 @@ void ATankPlayerController::OnTanksDeath()
 {
 	UE_LOG(LogTemp, Warning, TEXT("GameOver, you have been destroyed"));
 	StartSpectatingOnly();
+
+	//TODO Add END_GAME level
+	UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/_Levels/MainMenu"), TRAVEL_Absolute);
 }
 
 void ATankPlayerController::OnAIDeath()
 {
 	NumberOfAI--;
+
+	if (NumberOfAI == 0)
+	{
+		//TODO Add END_GAME level
+		UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/_Levels/MainMenu"), TRAVEL_Absolute);
+	}
 }
 
 void ATankPlayerController::AimTowardsCrosshair()
