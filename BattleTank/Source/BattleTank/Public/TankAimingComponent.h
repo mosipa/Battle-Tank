@@ -39,7 +39,7 @@ public:
 	void AimAt(FVector HitLocation);
 
 	UFUNCTION(BlueprintCallable, Category = Setup)
-		void Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
+		virtual void Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
 
 	EFiringState GetFiringState() const;
 
@@ -77,4 +77,7 @@ private:
 	void MoveBarrelTowards(FVector AimDirection);
 
 	bool IsBarrelMoving();
+
+	//Get FiringState to change color of aim point in BP
+	EFiringState GetCurrentFiringState();
 };

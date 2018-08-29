@@ -48,6 +48,9 @@ private:
 	UFUNCTION(BlueprintCallable)
 		int32 GetEnemiesLeft() const;
 
+	//Change map to MainMenu
+	void BackToMainMenu();
+
 	UTankAimingComponent* AimingComponent = nullptr;
 
 	//Crosshair
@@ -62,6 +65,8 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 		int32 NumberOfAI = 0;
+
+	FTimerHandle OutTimerHandle;
 
 protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = Setup)

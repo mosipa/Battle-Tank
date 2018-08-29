@@ -23,7 +23,11 @@ void UTankAimingComponent::BeginPlay()
 void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	GetCurrentFiringState();
+}
 
+EFiringState UTankAimingComponent::GetCurrentFiringState()
+{
 	float CurrentTime = GetWorld()->GetTimeSeconds();
 	if (AmmoLeft == 0)
 	{
@@ -33,7 +37,7 @@ void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickTy
 	{
 		FiringState = EFiringState::Reloading;
 	}
-	else if(IsBarrelMoving())
+	else if (IsBarrelMoving())
 	{
 		FiringState = EFiringState::Aiming;
 	}
@@ -41,6 +45,7 @@ void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickTy
 	{
 		FiringState = EFiringState::Locked;
 	}
+	return FiringState;
 }
 
 EFiringState UTankAimingComponent::GetFiringState() const
