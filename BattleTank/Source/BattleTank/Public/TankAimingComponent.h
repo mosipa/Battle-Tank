@@ -34,7 +34,7 @@ public:
 	UTankAimingComponent();
 
 	UFUNCTION(BlueprintCallable)
-		void Fire();
+		virtual	void Fire();
 
 	void AimAt(FVector HitLocation);
 
@@ -50,16 +50,8 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = State)
 		EFiringState FiringState = EFiringState::Reloading;
 
-private:
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		TSubclassOf<AProjectile> ProjectileBlueprint;
-
-	UPROPERTY(EditDefaultsOnly, Category = Firing)
-		float FiringCooldown = 5.0;
-
-	float LastTimeFiredProjectile = 0.0;
-
-	FVector LastBarrelLocation = FVector(0);
 
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 		float LaunchSpeed = 8000;
@@ -69,6 +61,14 @@ private:
 
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
+
+	float LastTimeFiredProjectile = 0.0;
+
+private:
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+		float FiringCooldown = 5.0;
+
+	FVector LastBarrelLocation = FVector(0);
 
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction) override;
 

@@ -145,7 +145,6 @@ void UTankAimingComponent::Fire()
 	auto OutProjectileSpawnLocation = Barrel->GetSocketLocation(FName("Projectile"));
 	auto OutProjectileSpawnRotation = Barrel->GetSocketRotation(FName("Projectile"));
 
-	
 	//if Firing is off-cooldown
 	if (FiringState == EFiringState::Locked || FiringState == EFiringState::Aiming)
 	{

@@ -10,12 +10,13 @@
  * 
  */
 
-class UTankBarrel;
-class UTankTurret;
-
-UCLASS()
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BATTLETANK_API UMortarAimingComponent : public UTankAimingComponent
 {
 	GENERATED_BODY()
 	
+public:
+
+	UFUNCTION(BlueprintCallable)
+		void Fire() override;
 };
