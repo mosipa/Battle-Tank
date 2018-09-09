@@ -25,6 +25,8 @@ private:
 
 	ATank();
 
+	float HealthPackVal = 0.0f;
+
 	UFUNCTION(BlueprintPure, Category = Health)
 		float GetHealthPercent() const;
 

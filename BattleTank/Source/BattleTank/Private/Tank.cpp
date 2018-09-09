@@ -62,13 +62,15 @@ void ATank::GetSpawnedBoosts()
 
 	for (auto Boost : SpawnedBoosts)
 	{
-		Cast<ABoost>(Boost)->BoostNotification.AddUniqueDynamic(this, &ATank::OnOverlappingBoost);
-		UE_LOG(LogTemp, Warning, TEXT("%s name"), *(Boost->GetName()));
+		//TODO Doesnt work when 2 or more healthpacks have different values (only applies 1 value)
+		BoostObject = Cast<ABoost>(Boost);
+		BoostObject->BoostNotification.AddUniqueDynamic(this, &ATank::OnOverlappingBoost);
 	}
 }
 
 void ATank::OnOverlappingBoost()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Inside overlapping boost"));
-	TanksCurrentHealth = FMath::Clamp<float>(TanksCurrentHealth + 20.0f, 0, TanksStartingHealth);
+	HealthPackVal = BoostObject->GetHealthPackVal();
+	TanksCurrentHealth = FMath::Clamp<float>(TanksCurrentHealth + HealthPackVal, 0, TanksStartingHealth);
+	UE_LOG(LogTemp, Warning, TEXT("%f current health"), HealthPackVal);
 }

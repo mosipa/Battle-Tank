@@ -44,3 +44,8 @@ void ABoost::OnOverlapByPlayer()
 		BoostNotification.Broadcast();
 	}
 }
+
+float ABoost::GetHealthPackVal()
+{
+	return HealthPackVal;
+}

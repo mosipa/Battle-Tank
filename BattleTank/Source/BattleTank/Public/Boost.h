@@ -21,16 +21,21 @@ public:
 
 	FBoostDelegate BoostNotification;
 
+	float GetHealthPackVal();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 private:
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditAnywhere, Category = Value)
+		float HealthPackVal = 20.0f;
 
 	UPROPERTY(VisibleAnywhere, Category = Component)
 		UStaticMeshComponent* BoostMesh = nullptr;
+
+	virtual void Tick(float DeltaTime) override;
 
 	void OnOverlapByPlayer();
 };
