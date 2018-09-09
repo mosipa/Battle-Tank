@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Kismet/GameplayStatics.h"
 #include "Tank.generated.h"
+
+class ABoost;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTankDelegate);
 
@@ -25,11 +28,22 @@ private:
 	UFUNCTION(BlueprintPure, Category = Health)
 		float GetHealthPercent() const;
 
+	UFUNCTION()
+		void OnOverlappingBoost();
+
 	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaTime) override;
+
+	void GetSpawnedBoosts();
 
 public:
 	// Sets default values for this pawn's properties
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 
 	FTankDelegate OnDeath;
+
+	ABoost* BoostObject;
+
+	float SetTankHealth(float HealthPackAmount);
 };
