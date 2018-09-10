@@ -13,6 +13,7 @@ ABoost::ABoost()
 
 	BoostMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("BoostMesh"));
 	SetRootComponent(Cast<USceneComponent>(BoostMesh));
+	Cast<USceneComponent>(BoostMesh)->SetVisibility(false);
 }
 
 // Called when the game starts or when spawned
@@ -38,10 +39,23 @@ void ABoost::OnOverlapByPlayer()
 	if (!BoostMesh) { return; }
 
 	bool bIsOverlapped = Cast<UPrimitiveComponent>(BoostMesh)->IsOverlappingActor(PlayerTank);
+	
+	CooldownRemain = GetWorld()->GetTimeSeconds() - LastTriggered;
 
-	if (bIsOverlapped)
+	if (CooldownRemain > Cooldown)
 	{
-		BoostNotification.Broadcast();
+		Cast<USceneComponent>(BoostMesh)->SetVisibility(true);
+		//Activate
+		if (bIsOverlapped)
+		{
+			LastTriggered = GetWorld()->GetTimeSeconds();
+			BoostNotification.Broadcast();
+		}
+	}
+	else
+	{
+		//Deactivate
+		Cast<USceneComponent>(BoostMesh)->SetVisibility(false);
 	}
 }
 

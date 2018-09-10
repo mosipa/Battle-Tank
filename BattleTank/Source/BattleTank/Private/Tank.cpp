@@ -72,5 +72,4 @@ void ATank::OnOverlappingBoost()
 {
 	HealthPackVal = BoostObject->GetHealthPackVal();
 	TanksCurrentHealth = FMath::Clamp<float>(TanksCurrentHealth + HealthPackVal, 0, TanksStartingHealth);
-	UE_LOG(LogTemp, Warning, TEXT("%f current health"), HealthPackVal);
 }

@@ -35,6 +35,13 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = Component)
 		UStaticMeshComponent* BoostMesh = nullptr;
 
+	UPROPERTY(EditAnywhere, Category = Value)
+		float Cooldown = 8.0f;
+
+	float CooldownRemain = 0.0f;
+	
+	float LastTriggered = 0.0f;
+
 	virtual void Tick(float DeltaTime) override;
 
 	void OnOverlapByPlayer();
