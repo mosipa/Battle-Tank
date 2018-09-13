@@ -64,12 +64,13 @@ void ATank::GetSpawnedBoosts()
 	{
 		//TODO Doesnt work when 2 or more healthpacks have different values (only applies 1 value)
 		BoostObject = Cast<ABoost>(Boost);
+		HealthPackVal = BoostObject->GetHealthPackVal();
 		BoostObject->BoostNotification.AddUniqueDynamic(this, &ATank::OnOverlappingBoost);
 	}
 }
 
 void ATank::OnOverlappingBoost()
 {
-	HealthPackVal = BoostObject->GetHealthPackVal();
 	TanksCurrentHealth = FMath::Clamp<float>(TanksCurrentHealth + HealthPackVal, 0, TanksStartingHealth);
+	UE_LOG(LogTemp, Warning, TEXT("Tank healed for %f with boost: %s"), BoostObject->GetHealthPackVal(), *BoostObject->GetName());
 }

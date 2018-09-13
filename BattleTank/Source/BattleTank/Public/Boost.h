@@ -21,7 +21,7 @@ public:
 
 	FBoostDelegate BoostNotification;
 
-	float GetHealthPackVal();
+	float GetHealthPackVal() const;
 
 protected:
 	// Called when the game starts or when spawned

@@ -44,8 +44,8 @@ void ABoost::OnOverlapByPlayer()
 
 	if (CooldownRemain > Cooldown)
 	{
-		Cast<USceneComponent>(BoostMesh)->SetVisibility(true);
 		//Activate
+		Cast<USceneComponent>(BoostMesh)->SetVisibility(true);
 		if (bIsOverlapped)
 		{
 			LastTriggered = GetWorld()->GetTimeSeconds();
@@ -59,7 +59,7 @@ void ABoost::OnOverlapByPlayer()
 	}
 }
 
-float ABoost::GetHealthPackVal()
+float ABoost::GetHealthPackVal() const
 {
 	return HealthPackVal;
 }
