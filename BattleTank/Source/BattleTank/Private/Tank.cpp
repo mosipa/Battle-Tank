@@ -2,6 +2,7 @@
 
 #include "Tank.h"
 #include "Boost.h"
+#include "TankBarrier.h"
 
 // Sets default values
 ATank::ATank()
@@ -60,6 +61,9 @@ void ATank::GetSpawnedBoosts()
 	TArray<AActor*> SpawnedBoosts;
 	UGameplayStatics::GetAllActorsOfClass(this, ABoost::StaticClass(), SpawnedBoosts);
 
+	TArray<AActor*> SpawnedBarriers;
+	UGameplayStatics::GetAllActorsOfClass(this, ATankBarrier::StaticClass(), SpawnedBarriers);
+
 	for (auto Boost : SpawnedBoosts)
 	{
 		//TODO Doesnt work when 2 or more healthpacks have different values (only applies 1 value)
@@ -67,6 +71,17 @@ void ATank::GetSpawnedBoosts()
 		HealthPackVal = BoostObject->GetHealthPackVal();
 		BoostObject->BoostNotification.AddUniqueDynamic(this, &ATank::OnOverlappingBoost);
 	}
+
+	for (auto Barrier : SpawnedBarriers)
+	{
+		TankBarrier = Cast<ATankBarrier>(Barrier);
+		TankBarrier->BarrierNotification.AddUniqueDynamic(this, &ATank::OnOverlappingBarrier);
+	}
+}
+
+void ATank::OnOverlappingBarrier()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Overlapping barrier"));
 }
 
 void ATank::OnOverlappingBoost()

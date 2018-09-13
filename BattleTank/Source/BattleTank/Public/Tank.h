@@ -8,6 +8,7 @@
 #include "Tank.generated.h"
 
 class ABoost;
+class ATankBarrier;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTankDelegate);
 
@@ -33,6 +34,9 @@ private:
 	UFUNCTION()
 		void OnOverlappingBoost();
 
+	UFUNCTION()
+		void OnOverlappingBarrier();
+
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
@@ -46,6 +50,8 @@ public:
 	FTankDelegate OnDeath;
 
 	ABoost* BoostObject;
+
+	ATankBarrier* TankBarrier;
 
 	float SetTankHealth(float HealthPackAmount);
 };

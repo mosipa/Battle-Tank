@@ -19,13 +19,6 @@ ABoost::ABoost()
 	Cast<USceneComponent>(BoostMesh)->SetVisibility(false);
 }
 
-// Called when the game starts or when spawned
-void ABoost::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
 // Called every frame
 void ABoost::Tick(float DeltaTime)
 {
