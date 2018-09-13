@@ -11,8 +11,11 @@ ABoost::ABoost()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	BaseMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("BaseMesh"));
+	SetRootComponent(Cast<USceneComponent>(BaseMesh));
+	Cast<USceneComponent>(BaseMesh)->SetVisibility(true);
+
 	BoostMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("BoostMesh"));
-	SetRootComponent(Cast<USceneComponent>(BoostMesh));
 	Cast<USceneComponent>(BoostMesh)->SetVisibility(false);
 }
 
@@ -27,7 +30,8 @@ void ABoost::BeginPlay()
 void ABoost::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
+	BoostMeshAnimation(DeltaTime);
 	OnOverlapByPlayer();
 }
 
@@ -57,6 +61,30 @@ void ABoost::OnOverlapByPlayer()
 		//Deactivate
 		Cast<USceneComponent>(BoostMesh)->SetVisibility(false);
 	}
+}
+
+void ABoost::BoostMeshAnimation(float DeltaTime)
+{
+	
+	float NewYaw = DeltaTime * YawPerSeconds;
+	FRotator NewRotation = FRotator(0.0f, NewYaw, 0.0f);
+	Cast<USceneComponent>(BoostMesh)->AddLocalRotation(NewRotation);
+
+	float GameSeconds = GetWorld()->GetTimeSeconds();
+	int32 intGameSeconds = GameSeconds;
+	float UpDown = 0;
+
+	if (intGameSeconds % 2 == 1)
+	{
+		UpDown = FMath::Pow((-1.0), 1);
+	}
+	else
+	{
+		UpDown = FMath::Pow((-1.0), 0);
+	}
+
+	FTransform NewTransform = FTransform(FVector(0.0f, 0.0f, UpDown * 1.0));
+	Cast<USceneComponent>(BoostMesh)->AddLocalTransform(NewTransform);
 }
 
 float ABoost::GetHealthPackVal() const

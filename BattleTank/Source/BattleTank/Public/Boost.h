@@ -33,6 +33,9 @@ private:
 		float HealthPackVal = 20.0f;
 
 	UPROPERTY(VisibleAnywhere, Category = Component)
+		UStaticMeshComponent* BaseMesh = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = Component)
 		UStaticMeshComponent* BoostMesh = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = Value)
@@ -42,7 +45,11 @@ private:
 	
 	float LastTriggered = 0.0f;
 
+	float YawPerSeconds = 36.0f;
+
 	virtual void Tick(float DeltaTime) override;
 
 	void OnOverlapByPlayer();
+
+	void BoostMeshAnimation(float DeltaTime);
 };
