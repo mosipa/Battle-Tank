@@ -3,6 +3,7 @@
 #include "Tank.h"
 #include "Boost.h"
 #include "TankBarrier.h"
+#include "Classes/Engine/World.h"
 
 // Sets default values
 ATank::ATank()
@@ -81,6 +82,23 @@ void ATank::GetSpawnedBoosts()
 
 void ATank::OnOverlappingBarrier()
 {
+	if (!ensure(TankBarrierBlueprint)) { return; }
+
+	//POSSIBLE? 2ND WAY
+	/*
+	auto TankBody = GetWorld()->GetFirstPlayerController()->GetPawn()->GetRootComponent();
+
+	UE_LOG(LogTemp, Warning, TEXT("Actor RootComponent Location: %s"), *(TankBody->GetComponentLocation().ToString()));
+	UE_LOG(LogTemp, Warning, TEXT("Actor RootComponent Rotation: %s"), *(TankBody->GetComponentRotation().ToString()));
+	UE_LOG(LogTemp, Warning, TEXT("Actor RootComponent: %s"), *(TankBody->GetName()));
+
+	auto Barrier = GetWorld()->SpawnActor<ATankBarrier>(
+		TankBarrierBlueprint,
+		TankBody->GetComponentLocation(),
+		TankBody->GetComponentRotation()
+		);
+	*/
+
 	UE_LOG(LogTemp, Warning, TEXT("Overlapping barrier"));
 }
 

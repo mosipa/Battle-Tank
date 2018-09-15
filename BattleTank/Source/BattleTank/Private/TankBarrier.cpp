@@ -29,8 +29,8 @@ void ATankBarrier::OnOverlapByPlayer()
 {
 	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
 
-	if (!PlayerTank) { return; }
-	if (!BoostMesh) { return; }
+	if (!ensure(PlayerTank)) { return; }
+	if (!ensure(BoostMesh)) { return; }
 
 	bool bIsOverlapped = Cast<UPrimitiveComponent>(BoostMesh)->IsOverlappingActor(PlayerTank);
 

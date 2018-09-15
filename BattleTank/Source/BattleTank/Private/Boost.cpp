@@ -32,8 +32,8 @@ void ABoost::OnOverlapByPlayer()
 {
 	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
 
-	if (!PlayerTank) { return; }
-	if (!BoostMesh) { return; }
+	if (!ensure(PlayerTank)) { return; }
+	if (!ensure(BoostMesh)) { return; }
 
 	bool bIsOverlapped = Cast<UPrimitiveComponent>(BoostMesh)->IsOverlappingActor(PlayerTank);
 	
@@ -58,11 +58,12 @@ void ABoost::OnOverlapByPlayer()
 
 void ABoost::BoostMeshAnimation(float DeltaTime)
 {
-	
+	//Rotate in Z axis
 	float NewYaw = DeltaTime * YawPerSeconds;
 	FRotator NewRotation = FRotator(0.0f, NewYaw, 0.0f);
 	Cast<USceneComponent>(BoostMesh)->AddLocalRotation(NewRotation);
 
+	//Move up and down
 	float GameSeconds = GetWorld()->GetTimeSeconds();
 	int32 intGameSeconds = GameSeconds;
 	float UpDown = 0;
