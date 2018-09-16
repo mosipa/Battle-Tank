@@ -51,6 +51,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		virtual	void ActivateBarrier();
 	
+	UFUNCTION(BlueprintCallable)
+		int32 GetBarriersLeft();
+
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 
 	FTankDelegate OnDeath;
@@ -60,6 +63,4 @@ public:
 	ATankBarrier* TankBarrier;
 
 	float SetTankHealth(float HealthPackAmount);
-
-	int32 GetBarriersLeft();
 };
