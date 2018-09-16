@@ -24,6 +24,9 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = Health)
 		float TanksCurrentHealth; //Initialise in BeginPlay to prevent bug
 
+	UPROPERTY(EditAnywhere, Category = Setup)
+		int32 BarriersLeft = 0;
+
 	ATank();
 
 	float HealthPackVal = 0.0f;
@@ -45,6 +48,9 @@ private:
 
 public:
 	// Sets default values for this pawn's properties
+	UFUNCTION(BlueprintCallable)
+		virtual	void ActivateBarrier();
+	
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 
 	FTankDelegate OnDeath;
@@ -54,4 +60,6 @@ public:
 	ATankBarrier* TankBarrier;
 
 	float SetTankHealth(float HealthPackAmount);
+
+	int32 GetBarriersLeft();
 };

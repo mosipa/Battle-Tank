@@ -82,24 +82,25 @@ void ATank::GetSpawnedBoosts()
 
 void ATank::OnOverlappingBarrier()
 {
-	if (!ensure(TankBarrierBlueprint)) { return; }
+	BarriersLeft = FMath::Clamp<int32>(BarriersLeft + 1, 0, 3);
+}
 
-	//POSSIBLE? 2ND WAY
-	/*
-	auto TankBody = GetWorld()->GetFirstPlayerController()->GetPawn()->GetRootComponent();
+int32 ATank::GetBarriersLeft()
+{
+	return BarriersLeft;
+}
 
-	UE_LOG(LogTemp, Warning, TEXT("Actor RootComponent Location: %s"), *(TankBody->GetComponentLocation().ToString()));
-	UE_LOG(LogTemp, Warning, TEXT("Actor RootComponent Rotation: %s"), *(TankBody->GetComponentRotation().ToString()));
-	UE_LOG(LogTemp, Warning, TEXT("Actor RootComponent: %s"), *(TankBody->GetName()));
-
-	auto Barrier = GetWorld()->SpawnActor<ATankBarrier>(
-		TankBarrierBlueprint,
-		TankBody->GetComponentLocation(),
-		TankBody->GetComponentRotation()
-		);
-	*/
-
-	UE_LOG(LogTemp, Warning, TEXT("Overlapping barrier"));
+void ATank::ActivateBarrier()
+{
+	if (BarriersLeft > 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Activating Barrier 1 out of %i"), BarriersLeft);
+		BarriersLeft = FMath::Clamp<int32>(BarriersLeft - 1, 0, 3);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("You dont have any barriers left"));
+	}
 }
 
 void ATank::OnOverlappingBoost()
