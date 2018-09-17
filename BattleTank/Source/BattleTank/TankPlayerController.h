@@ -12,6 +12,7 @@
  * 
  */
 class UTankAimingComponent;
+class ABoost;
 
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
@@ -39,6 +40,8 @@ private:
 
 	virtual void SetPawn(APawn* InPawn) override;
 
+	void GetSpawnedHealthPacks();
+
 	void CountAITanks();
 
 	//Get all AIControllers and check if any of them got destroyed
@@ -47,6 +50,9 @@ private:
 	//Return number of enemies left
 	UFUNCTION(BlueprintCallable)
 		int32 GetEnemiesLeft() const;
+
+	UFUNCTION()
+		void OnOverlappingBoost();
 
 	//Change map to MainMenu
 	void BackToMainMenu();
@@ -67,6 +73,8 @@ private:
 		int32 NumberOfAI = 0;
 
 	FTimerHandle OutTimerHandle;
+
+	ABoost* BoostObject;
 
 protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = Setup)

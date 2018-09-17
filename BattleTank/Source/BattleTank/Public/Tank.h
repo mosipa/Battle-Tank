@@ -7,10 +7,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Tank.generated.h"
 
-class ABoost;
 class ATankBarrier;
 class UTankBarrierMesh;
-
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTankDelegate);
 
@@ -39,9 +37,6 @@ private:
 		float GetHealthPercent() const;
 
 	UFUNCTION()
-		void OnOverlappingBoost();
-
-	UFUNCTION()
 		void OnOverlappingBarrier();
 
 	virtual void BeginPlay() override;
@@ -66,9 +61,9 @@ public:
 
 	FTankDelegate OnDeath;
 
-	ABoost* BoostObject;
-
 	ATankBarrier* TankBarrier;
 
-	float SetTankHealth(float HealthPackAmount);
+	void SetTankHealth(float HealthPackAmount);
+
+	float GetTanksCurrentHealth() const;
 };

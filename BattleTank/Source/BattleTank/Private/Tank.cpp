@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Tank.h"
-#include "Boost.h"
 #include "TankBarrier.h"
 #include "TankBarrierMesh.h"
 #include "Classes/Engine/World.h"
@@ -46,9 +45,9 @@ float ATank::GetHealthPercent() const
 	return TanksCurrentHealth / TanksStartingHealth;
 }
 
-float ATank::SetTankHealth(float HealthPackAmount)
+void ATank::SetTankHealth(float HealthPackAmount)
 {
-	return FMath::Clamp<float>(TanksCurrentHealth + HealthPackAmount, 0, TanksStartingHealth);
+	TanksCurrentHealth = FMath::Clamp<float>(TanksCurrentHealth + HealthPackAmount, 0, TanksStartingHealth);
 }
 
 void ATank::Tick(float DeltaTime)
@@ -60,18 +59,8 @@ void ATank::Tick(float DeltaTime)
 
 void ATank::GetSpawnedBoosts()
 {
-	TArray<AActor*> SpawnedBoosts;
-	UGameplayStatics::GetAllActorsOfClass(this, ABoost::StaticClass(), SpawnedBoosts);
-
 	TArray<AActor*> SpawnedBarriers;
 	UGameplayStatics::GetAllActorsOfClass(this, ATankBarrier::StaticClass(), SpawnedBarriers);
-
-	for (auto Boost : SpawnedBoosts)
-	{
-		//TODO Doesnt work when 2 or more healthpacks have different values (only applies 1 value)
-		BoostObject = Cast<ABoost>(Boost);
-		BoostObject->BoostNotification.AddUniqueDynamic(this, &ATank::OnOverlappingBoost);
-	}
 
 	for (auto Barrier : SpawnedBarriers)
 	{
@@ -101,17 +90,8 @@ void ATank::ActivateBarrier()
 		Cast<UPrimitiveComponent>(TankBarrierMesh)->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 		Cast<USceneComponent>(TankBarrierMesh)->SetVisibility(true);
 		BarriersLeft = FMath::Clamp<int32>(BarriersLeft - 1, 0, 3);
-
 		GetWorldTimerManager().SetTimer(OutTimerHandle, this, &ATank::DeactivateBarrier, BarrierDuration, false);
-	}/*
-	else
-	{
-		auto TankBarrierMesh = GetWorld()->GetFirstPlayerController()->GetPawn()->GetComponentByClass(UTankBarrierMesh::StaticClass());
-		if (!ensure(TankBarrierMesh)) { return; }
-
-		Cast<UPrimitiveComponent>(TankBarrierMesh)->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		Cast<USceneComponent>(TankBarrierMesh)->SetVisibility(false);
-	}*/
+	}
 }
 
 void ATank::DeactivateBarrier()
@@ -123,14 +103,7 @@ void ATank::DeactivateBarrier()
 	Cast<USceneComponent>(TankBarrierMesh)->SetVisibility(false);
 }
 
-void ATank::OnOverlappingBoost()
+float ATank::GetTanksCurrentHealth() const
 {
-	//TODO bug with healing all spawned tanks instead of the one that is overlapping 
-	//TODO possible another bug healing twice
-
-	auto PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	if (!ensure(PlayerTank)) { return; }
-
-	PlayerTank->TanksCurrentHealth = FMath::Clamp<float>(PlayerTank->TanksCurrentHealth + HealthPackVal, 0, TanksStartingHealth);
-	UE_LOG(LogTemp, Warning, TEXT("Tank healed for %f with boost: %s"), BoostObject->GetHealthPackVal(), *BoostObject->GetName());
+	return TanksCurrentHealth;
 }
