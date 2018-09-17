@@ -9,6 +9,8 @@
 
 class ABoost;
 class ATankBarrier;
+class UTankBarrierMesh;
+
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FTankDelegate);
 

@@ -13,8 +13,5 @@ UCLASS(meta = (BlueprintSpawnableComponent))
 class BATTLETANK_API UTankBarrierMesh : public UStaticMeshComponent
 {
 	GENERATED_BODY()
-	
-	
-	
-	
+
 };

@@ -3,6 +3,7 @@
 #include "Tank.h"
 #include "Boost.h"
 #include "TankBarrier.h"
+#include "TankBarrierMesh.h"
 #include "Classes/Engine/World.h"
 
 // Sets default values
@@ -94,17 +95,29 @@ void ATank::ActivateBarrier()
 {
 	if (BarriersLeft > 0)
 	{
+		auto TankBarrierMesh = GetWorld()->GetFirstPlayerController()->GetPawn()->GetComponentByClass(UTankBarrierMesh::StaticClass());
+		if (!ensure(TankBarrierMesh)) { return; }
+		
+		Cast<UPrimitiveComponent>(TankBarrierMesh)->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		Cast<USceneComponent>(TankBarrierMesh)->SetVisibility(true);
 		UE_LOG(LogTemp, Warning, TEXT("Activating Barrier 1 out of %i"), BarriersLeft);
 		BarriersLeft = FMath::Clamp<int32>(BarriersLeft - 1, 0, 3);
 	}
 	else
 	{
+		auto TankBarrierMesh = GetWorld()->GetFirstPlayerController()->GetPawn()->GetComponentByClass(UTankBarrierMesh::StaticClass());
+		if (!ensure(TankBarrierMesh)) { return; }
+
+		Cast<UPrimitiveComponent>(TankBarrierMesh)->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		Cast<USceneComponent>(TankBarrierMesh)->SetVisibility(false);
 		UE_LOG(LogTemp, Warning, TEXT("You dont have any barriers left"));
 	}
 }
 
 void ATank::OnOverlappingBoost()
 {
-	TanksCurrentHealth = FMath::Clamp<float>(TanksCurrentHealth + HealthPackVal, 0, TanksStartingHealth);
+	//TODO bug with healing all spawned tanks instead of the one that is overlapping 
+	//TODO possible another bug healing twice
+	this->TanksCurrentHealth = FMath::Clamp<float>(this->TanksCurrentHealth + HealthPackVal, 0, TanksStartingHealth);
 	UE_LOG(LogTemp, Warning, TEXT("Tank healed for %f with boost: %s"), BoostObject->GetHealthPackVal(), *BoostObject->GetName());
 }
