@@ -70,13 +70,13 @@ void ATank::GetSpawnedBoosts()
 	{
 		//TODO Doesnt work when 2 or more healthpacks have different values (only applies 1 value)
 		BoostObject = Cast<ABoost>(Boost);
-		HealthPackVal = BoostObject->GetHealthPackVal();
 		BoostObject->BoostNotification.AddUniqueDynamic(this, &ATank::OnOverlappingBoost);
 	}
 
 	for (auto Barrier : SpawnedBarriers)
 	{
 		TankBarrier = Cast<ATankBarrier>(Barrier);
+		BarrierDuration = TankBarrier->GetBarrierDuration();
 		TankBarrier->BarrierNotification.AddUniqueDynamic(this, &ATank::OnOverlappingBarrier);
 	}
 }
@@ -100,9 +100,10 @@ void ATank::ActivateBarrier()
 		
 		Cast<UPrimitiveComponent>(TankBarrierMesh)->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 		Cast<USceneComponent>(TankBarrierMesh)->SetVisibility(true);
-		UE_LOG(LogTemp, Warning, TEXT("Activating Barrier 1 out of %i"), BarriersLeft);
 		BarriersLeft = FMath::Clamp<int32>(BarriersLeft - 1, 0, 3);
-	}
+
+		GetWorldTimerManager().SetTimer(OutTimerHandle, this, &ATank::DeactivateBarrier, BarrierDuration, false);
+	}/*
 	else
 	{
 		auto TankBarrierMesh = GetWorld()->GetFirstPlayerController()->GetPawn()->GetComponentByClass(UTankBarrierMesh::StaticClass());
@@ -110,14 +111,26 @@ void ATank::ActivateBarrier()
 
 		Cast<UPrimitiveComponent>(TankBarrierMesh)->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 		Cast<USceneComponent>(TankBarrierMesh)->SetVisibility(false);
-		UE_LOG(LogTemp, Warning, TEXT("You dont have any barriers left"));
-	}
+	}*/
+}
+
+void ATank::DeactivateBarrier()
+{
+	auto TankBarrierMesh = GetWorld()->GetFirstPlayerController()->GetPawn()->GetComponentByClass(UTankBarrierMesh::StaticClass());
+	if (!ensure(TankBarrierMesh)) { return; }
+
+	Cast<UPrimitiveComponent>(TankBarrierMesh)->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Cast<USceneComponent>(TankBarrierMesh)->SetVisibility(false);
 }
 
 void ATank::OnOverlappingBoost()
 {
 	//TODO bug with healing all spawned tanks instead of the one that is overlapping 
 	//TODO possible another bug healing twice
-	this->TanksCurrentHealth = FMath::Clamp<float>(this->TanksCurrentHealth + HealthPackVal, 0, TanksStartingHealth);
+
+	auto PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	if (!ensure(PlayerTank)) { return; }
+
+	PlayerTank->TanksCurrentHealth = FMath::Clamp<float>(PlayerTank->TanksCurrentHealth + HealthPackVal, 0, TanksStartingHealth);
 	UE_LOG(LogTemp, Warning, TEXT("Tank healed for %f with boost: %s"), BoostObject->GetHealthPackVal(), *BoostObject->GetName());
 }

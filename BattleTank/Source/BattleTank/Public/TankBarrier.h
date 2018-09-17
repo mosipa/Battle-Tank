@@ -19,6 +19,8 @@ public:
 
 	FBarrierDelegate BarrierNotification;
 
+	float GetBarrierDuration() const;
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = Component)
 		UStaticMeshComponent* BaseMesh = nullptr;
@@ -26,8 +28,11 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = Component)
 		UStaticMeshComponent* BoostMesh = nullptr;
 	
-	UPROPERTY(EditAnywhere, Category = Value)
+	UPROPERTY(EditAnywhere, Category = Setup)
 		float Cooldown = 2.0f;
+
+	UPROPERTY(EditAnywhere, Category = Setup)
+		float BarrierDuration = 4.0f;
 
 	float CooldownRemain = 0.0f;
 

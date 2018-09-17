@@ -33,6 +33,8 @@ private:
 
 	float HealthPackVal = 0.0f;
 
+	float BarrierDuration = 0.0f;
+
 	UFUNCTION(BlueprintPure, Category = Health)
 		float GetHealthPercent() const;
 
@@ -56,7 +58,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 		int32 GetBarriersLeft();
 
+	void DeactivateBarrier();
+
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
+
+	FTimerHandle OutTimerHandle;
 
 	FTankDelegate OnDeath;
 

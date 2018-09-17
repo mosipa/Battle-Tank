@@ -25,6 +25,11 @@ void ATankBarrier::Tick(float DeltaTime)
 	OnOverlapByPlayer();
 }
 
+float ATankBarrier::GetBarrierDuration() const
+{
+	return BarrierDuration;
+}
+
 void ATankBarrier::OnOverlapByPlayer()
 {
 	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
