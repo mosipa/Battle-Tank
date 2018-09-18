@@ -66,7 +66,7 @@ void ATank::GetSpawnedBoosts()
 	{
 		TankBarrier = Cast<ATankBarrier>(Barrier);
 		BarrierDuration = TankBarrier->GetBarrierDuration();
-		TankBarrier->BarrierNotification.AddUniqueDynamic(this, &ATank::OnOverlappingBarrier);
+		TankBarrier->BoostNotification.AddUniqueDynamic(this, &ATank::OnOverlappingBarrier);
 	}
 }
 
@@ -82,7 +82,7 @@ int32 ATank::GetBarriersLeft()
 
 void ATank::ActivateBarrier()
 {
-	if (BarriersLeft > 0)
+	if (GetBarriersLeft() > 0)
 	{
 		auto TankBarrierMesh = GetWorld()->GetFirstPlayerController()->GetPawn()->GetComponentByClass(UTankBarrierMesh::StaticClass());
 		if (!ensure(TankBarrierMesh)) { return; }
