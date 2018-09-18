@@ -1,9 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Tank.h"
-#include "TankBarrier.h"
-#include "TankBarrierMesh.h"
-#include "Classes/Engine/World.h"
 
 // Sets default values
 ATank::ATank()
@@ -48,59 +45,6 @@ float ATank::GetHealthPercent() const
 void ATank::SetTankHealth(float HealthPackAmount)
 {
 	TanksCurrentHealth = FMath::Clamp<float>(TanksCurrentHealth + HealthPackAmount, 0, TanksStartingHealth);
-}
-
-void ATank::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	GetSpawnedBoosts();
-}
-
-void ATank::GetSpawnedBoosts()
-{
-	TArray<AActor*> SpawnedBarriers;
-	UGameplayStatics::GetAllActorsOfClass(this, ATankBarrier::StaticClass(), SpawnedBarriers);
-
-	for (auto Barrier : SpawnedBarriers)
-	{
-		TankBarrier = Cast<ATankBarrier>(Barrier);
-		BarrierDuration = TankBarrier->GetBarrierDuration();
-		TankBarrier->BoostNotification.AddUniqueDynamic(this, &ATank::OnOverlappingBarrier);
-	}
-}
-
-void ATank::OnOverlappingBarrier()
-{
-	BarriersLeft = FMath::Clamp<int32>(BarriersLeft + 1, 0, 3);
-}
-
-int32 ATank::GetBarriersLeft()
-{
-	return BarriersLeft;
-}
-
-void ATank::ActivateBarrier()
-{
-	if (GetBarriersLeft() > 0)
-	{
-		auto TankBarrierMesh = GetWorld()->GetFirstPlayerController()->GetPawn()->GetComponentByClass(UTankBarrierMesh::StaticClass());
-		if (!ensure(TankBarrierMesh)) { return; }
-		
-		Cast<UPrimitiveComponent>(TankBarrierMesh)->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-		Cast<USceneComponent>(TankBarrierMesh)->SetVisibility(true);
-		BarriersLeft = FMath::Clamp<int32>(BarriersLeft - 1, 0, 3);
-		GetWorldTimerManager().SetTimer(OutTimerHandle, this, &ATank::DeactivateBarrier, BarrierDuration, false);
-	}
-}
-
-void ATank::DeactivateBarrier()
-{
-	auto TankBarrierMesh = GetWorld()->GetFirstPlayerController()->GetPawn()->GetComponentByClass(UTankBarrierMesh::StaticClass());
-	if (!ensure(TankBarrierMesh)) { return; }
-
-	Cast<UPrimitiveComponent>(TankBarrierMesh)->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	Cast<USceneComponent>(TankBarrierMesh)->SetVisibility(false);
 }
 
 float ATank::GetTanksCurrentHealth() const

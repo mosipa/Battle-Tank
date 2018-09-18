@@ -5,6 +5,8 @@
 #include "TankAIController.h"
 #include "TankAimingComponent.h"
 #include "HealthPack.h"
+#include "TankBarrier.h"
+#include "TankBarrierMesh.h"
 
 void ATankPlayerController::BeginPlay()
 {
@@ -24,7 +26,7 @@ void ATankPlayerController::Tick(float DeltaTime)
 	AimTowardsCrosshair();
 	
 	GetAIControllers(); 
-	GetSpawnedHealthPacks();
+	GetSpawnedBoosts();
 }
 
 void ATankPlayerController::CountAITanks()
@@ -95,7 +97,7 @@ void ATankPlayerController::BackToMainMenu()
 	UGameplayStatics::OpenLevel(GetWorld(), TEXT("/Game/_Levels/MainMenu"), TRAVEL_Absolute);
 }
 
-void ATankPlayerController::GetSpawnedHealthPacks()
+void ATankPlayerController::GetSpawnedBoosts()
 {
 	TArray<AActor*> SpawnedHealthPacks;
 	UGameplayStatics::GetAllActorsOfClass(this, AHealthPack::StaticClass(), SpawnedHealthPacks);
@@ -106,11 +108,54 @@ void ATankPlayerController::GetSpawnedHealthPacks()
 		HealthPack = Cast<AHealthPack>(HealthP);
 		HealthPack->BoostNotification.AddUniqueDynamic(this, &ATankPlayerController::OnOverlappingBoost);
 	}
+
+	TArray<AActor*> SpawnedBarriers;
+	UGameplayStatics::GetAllActorsOfClass(this, ATankBarrier::StaticClass(), SpawnedBarriers);
+
+	for (auto Barrier : SpawnedBarriers)
+	{
+		TankBarrier = Cast<ATankBarrier>(Barrier);
+		BarrierDuration = TankBarrier->GetBarrierDuration();
+		TankBarrier->BoostNotification.AddUniqueDynamic(this, &ATankPlayerController::OnOverlappingBarrier);
+	}
+}
+
+void ATankPlayerController::OnOverlappingBarrier()
+{
+	BarriersLeft = FMath::Clamp<int32>(BarriersLeft + 1, 0, 3);
+}
+
+int32 ATankPlayerController::GetBarriersLeft()
+{
+	return BarriersLeft;
+}
+
+void ATankPlayerController::ActivateBarrier()
+{
+	if (GetBarriersLeft() > 0)
+	{
+		auto TankBarrierMesh = GetPawn()->GetComponentByClass(UTankBarrierMesh::StaticClass());
+		if (!ensure(TankBarrierMesh)) { return; }
+
+		Cast<UPrimitiveComponent>(TankBarrierMesh)->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+		Cast<USceneComponent>(TankBarrierMesh)->SetVisibility(true);
+		BarriersLeft = FMath::Clamp<int32>(BarriersLeft - 1, 0, 3);
+		GetWorldTimerManager().SetTimer(OutTimerHandle, this, &ATankPlayerController::DeactivateBarrier, BarrierDuration, false);
+	}
+}
+
+void ATankPlayerController::DeactivateBarrier()
+{
+	auto TankBarrierMesh = GetPawn()->GetComponentByClass(UTankBarrierMesh::StaticClass());
+	if (!ensure(TankBarrierMesh)) { return; }
+
+	Cast<UPrimitiveComponent>(TankBarrierMesh)->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Cast<USceneComponent>(TankBarrierMesh)->SetVisibility(false);
 }
 
 void ATankPlayerController::OnOverlappingBoost()
 {
-	auto PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	auto PlayerTank = Cast<ATank>(GetPawn());
 	if (!ensure(PlayerTank)) { return; }
 	if (!ensure(HealthPack)) { return; }
 

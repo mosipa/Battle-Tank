@@ -13,6 +13,7 @@
  */
 class UTankAimingComponent;
 class AHealthPack;
+class ATankBarrier;
 
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
@@ -40,7 +41,7 @@ private:
 
 	virtual void SetPawn(APawn* InPawn) override;
 
-	void GetSpawnedHealthPacks();
+	void GetSpawnedBoosts();
 
 	void CountAITanks();
 
@@ -72,6 +73,17 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 		int32 NumberOfAI = 0;
 
+	//Barrier boost
+	UPROPERTY(EditAnywhere, Category = Setup)
+		int32 BarriersLeft = 0;
+
+	float BarrierDuration = 0.0f;
+
+	ATankBarrier* TankBarrier;
+
+	UFUNCTION()
+		void OnOverlappingBarrier();
+
 	FTimerHandle OutTimerHandle;
 
 	AHealthPack* HealthPack = nullptr;
@@ -79,4 +91,13 @@ private:
 protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = Setup)
 		void FoundAimingComponent(UTankAimingComponent* AimCompRef);
+
+public:
+	UFUNCTION(BlueprintCallable)
+		virtual	void ActivateBarrier();
+
+	UFUNCTION(BlueprintCallable)
+		int32 GetBarriersLeft();
+
+	void DeactivateBarrier();
 };
