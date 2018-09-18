@@ -12,7 +12,7 @@
  * 
  */
 class UTankAimingComponent;
-class ABoost;
+class AHealthPack;
 
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
@@ -74,7 +74,7 @@ private:
 
 	FTimerHandle OutTimerHandle;
 
-	ABoost* BoostObject;
+	AHealthPack* HealthPack = nullptr;
 
 protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = Setup)

@@ -80,8 +80,3 @@ void ABoost::BoostMeshAnimation(float DeltaTime)
 	FTransform NewTransform = FTransform(FVector(0.0f, 0.0f, UpDown * 1.0));
 	Cast<USceneComponent>(BoostMesh)->AddLocalTransform(NewTransform);
 }
-
-float ABoost::GetHealthPackVal() const
-{
-	return HealthPackVal;
-}

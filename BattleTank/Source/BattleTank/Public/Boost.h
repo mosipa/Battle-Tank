@@ -21,20 +21,14 @@ public:
 
 	FBoostDelegate BoostNotification;
 
-	float GetHealthPackVal() const;
-
 private:
-	// Called every frame
-	UPROPERTY(EditAnywhere, Category = Value)
-		float HealthPackVal = 20.0f;
-
 	UPROPERTY(VisibleAnywhere, Category = Component)
 		UStaticMeshComponent* BaseMesh = nullptr;
 
 	UPROPERTY(VisibleAnywhere, Category = Component)
 		UStaticMeshComponent* BoostMesh = nullptr;
 
-	UPROPERTY(EditAnywhere, Category = Value)
+	UPROPERTY(EditAnywhere, Category = Setup)
 		float Cooldown = 8.0f;
 
 	float CooldownRemain = 0.0f;

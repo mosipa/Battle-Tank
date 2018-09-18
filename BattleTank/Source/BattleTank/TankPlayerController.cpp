@@ -4,7 +4,7 @@
 #include "Tank.h"
 #include "TankAIController.h"
 #include "TankAimingComponent.h"
-#include "Boost.h"
+#include "HealthPack.h"
 
 void ATankPlayerController::BeginPlay()
 {
@@ -97,14 +97,14 @@ void ATankPlayerController::BackToMainMenu()
 
 void ATankPlayerController::GetSpawnedHealthPacks()
 {
-	TArray<AActor*> SpawnedBoosts;
-	UGameplayStatics::GetAllActorsOfClass(this, ABoost::StaticClass(), SpawnedBoosts);
+	TArray<AActor*> SpawnedHealthPacks;
+	UGameplayStatics::GetAllActorsOfClass(this, AHealthPack::StaticClass(), SpawnedHealthPacks);
 
-	for (auto Boost : SpawnedBoosts)
+	for (auto HealthP : SpawnedHealthPacks)
 	{
 		//TODO Doesnt work when 2 or more healthpacks have different values (only applies 1 value)
-		BoostObject = Cast<ABoost>(Boost);
-		BoostObject->BoostNotification.AddUniqueDynamic(this, &ATankPlayerController::OnOverlappingBoost);
+		HealthPack = Cast<AHealthPack>(HealthP);
+		HealthPack->BoostNotification.AddUniqueDynamic(this, &ATankPlayerController::OnOverlappingBoost);
 	}
 }
 
@@ -112,9 +112,9 @@ void ATankPlayerController::OnOverlappingBoost()
 {
 	auto PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	if (!ensure(PlayerTank)) { return; }
-	if (!ensure(BoostObject)) { return; }
+	if (!ensure(HealthPack)) { return; }
 
-	auto HealthPackAmount = BoostObject->GetHealthPackVal();
+	auto HealthPackAmount = HealthPack->GetHealthPackValue();
 	UE_LOG(LogTemp, Warning, TEXT("Added %f to tank %s"), HealthPackAmount,*(PlayerTank->GetName()));
 	PlayerTank->SetTankHealth(HealthPackAmount);
 }
