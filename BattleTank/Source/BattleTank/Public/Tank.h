@@ -20,52 +20,19 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = Health)
 		float TanksCurrentHealth; //Initialise in BeginPlay to prevent bug
-	/*
-	UPROPERTY(EditAnywhere, Category = Setup)
-		int32 BarriersLeft = 0;
-	*/
-	ATank();
 
-	/*
-	float BarrierDuration = 0.0f;
-	*/
+	ATank();
 
 	UFUNCTION(BlueprintPure, Category = Health)
 		float GetHealthPercent() const;
 
-	/*
-	UFUNCTION()
-		void OnOverlappingBarrier();
-	*/
-
 	virtual void BeginPlay() override;
 
-	/*
-	void GetSpawnedBoosts();
-	*/
-
 public:
-	/*
-	UFUNCTION(BlueprintCallable)
-		virtual	void ActivateBarrier();
-	
-	UFUNCTION(BlueprintCallable)
-		int32 GetBarriersLeft();
-
-	void DeactivateBarrier();
-	*/
-
-	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
-
-	/*
-	FTimerHandle OutTimerHandle;
-	*/
 
 	FTankDelegate OnDeath;
 
-	/*
-	ATankBarrier* TankBarrier;
-	*/
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 
 	void SetTankHealth(float HealthPackAmount);
 
