@@ -32,7 +32,7 @@ void ABoost::OnOverlapByPlayer()
 {
 	auto PlayerTank = GetWorld()->GetFirstPlayerController()->GetPawn();
 
-	if (!ensure(PlayerTank)) { return; }
+	if (!PlayerTank) { return; }
 	if (!ensure(BoostMesh)) { return; }
 
 	bool bIsOverlapped = Cast<UPrimitiveComponent>(BoostMesh)->IsOverlappingActor(PlayerTank);
