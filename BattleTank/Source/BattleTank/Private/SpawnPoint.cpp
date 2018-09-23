@@ -3,6 +3,7 @@
 #include "SpawnPoint.h"
 #include "SprungWheel.h"
 #include "Engine/World.h"
+#include "GameFramework/Actor.h"
 #include "Classes/Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
@@ -21,15 +22,19 @@ void USpawnPoint::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto Wheel = GetWorld()->SpawnActorDeferred<ASprungWheel>(SprungWheelBlueprint, GetComponentTransform());
+	SpawnedActor = GetWorld()->SpawnActorDeferred<ASprungWheel>(SprungWheelBlueprint, GetComponentTransform());
 	
-	if (!Wheel)	{return;}
+	if (!SpawnedActor)	{return;}
 
-	Wheel->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
+	SpawnedActor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
 
-	UGameplayStatics::FinishSpawningActor(Wheel, GetComponentTransform());
+	UGameplayStatics::FinishSpawningActor(SpawnedActor, GetComponentTransform());
 }
 
+AActor* USpawnPoint::GetSpawnedActor() const
+{
+	return SpawnedActor;
+}
 
 // Called every frame
 void USpawnPoint::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
